@@ -1,8 +1,10 @@
 # rterm2
 
-**Deutsch** · [English](README.en.md)
+[English](README.md) · **Deutsch**
 
 Terminal-Emulator für Linux (X11 und Wayland) in Rust, inspiriert von iTerm2: Tabs, Split Panes, iTerm2-Farbschemas und GPU-Rendering – komplett per Tastatur bedienbar. Den Terminal-Kern (VT100/xterm) liefert [`alacritty_terminal`](https://github.com/alacritty/alacritty).
+
+![rterm2 mit drei Split Panes (vim, bash, cmatrix), zwei Tabs und geöffneter Farbschema-Auswahl](docs/screenshot.png)
 
 ## Funktionen
 
@@ -15,7 +17,19 @@ Terminal-Emulator für Linux (X11 und Wayland) in Rust, inspiriert von iTerm2: T
 - **Tab-Titel** zeigen das laufende Programm der aktiven Pane (`zsh`, `nvim`, `htop` …)
 - Maus optional: markieren, PRIMARY-Auswahl, Mausmodus für mc/htop/vim, Trennlinien ziehen
 
-## Bauen & starten
+## Bauen & installieren mit make
+
+```sh
+make              # Release-Build
+make install      # nach ~/.local/bin + Startmenü-Eintrag (systemweit: sudo make install PREFIX=/usr/local)
+make config       # Config-Vorlage nach ~/.config/rterm2/config.toml (überschreibt nichts)
+make uninstall    # wieder entfernen, die eigene Config bleibt
+make help         # alle Ziele: run, test, check, fmt, clippy, clean …
+```
+
+`~/.local/bin` muss in `PATH` stehen, damit das Startmenü rterm2 findet – `make install` weist darauf hin. Für Pakete: `make install DESTDIR=/tmp/pkg PREFIX=/usr`.
+
+## Bauen & starten mit cargo
 
 ```sh
 cargo run --release
@@ -25,7 +39,7 @@ RUST_LOG=rterm2=debug cargo run   # zeigt jede Taste samt Modifikatoren
 
 Benötigt: Rust ≥ 1.77, `fc-match` (fontconfig) zum Finden der Schrift, alternativ `[font] path` setzen.
 
-## Installieren
+Ohne make installieren:
 
 ```sh
 cargo install --path .                                                     # Programm nach ~/.cargo/bin/rterm2
@@ -192,4 +206,4 @@ rterm2 bevorzugt die stromsparende (integrierte) GPU.
 
 ## Lizenz
 
-Wahlweise [MIT](LICENSE-MIT) oder [Apache-2.0](LICENSE-APACHE).
+Siehe [LICENSE](LICENSE).
