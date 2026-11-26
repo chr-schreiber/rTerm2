@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=rterm2
+GenericName=Terminal
+Comment=Terminal im Stil von iTerm2
+Exec=rterm2
+Icon=utilities-terminal
+Terminal=false
+Categories=System;TerminalEmulator;
+Keywords=shell;prompt;command;terminal;
+StartupWMClass=rterm2
+Actions=new-window;
+
+[Desktop Action new-window]
+Name=Neues Fenster
+Exec=rterm2

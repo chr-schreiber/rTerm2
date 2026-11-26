@@ -1,0 +1,101 @@
+# rterm2 – vollständige Konfiguration
+#
+# Ablageort:  ~/.config/rterm2/config.toml
+#
+# Alle Werte in dieser Datei entsprechen genau den Standardwerten von rterm2.
+# Die Datei verhält sich also wie gar keine Config – du kannst gezielt ändern,
+# was du brauchst. Gelöschte Zeilen fallen auf den Standard zurück.
+# Änderungen wirken nach einem Neustart von rterm2.
+
+
+# ─── Allgemein ──────────────────────────────────────────────────────────────
+
+# Farbschema: Name eines eingebauten Schemas, Dateiname (ohne Endung) aus
+# ~/.config/rterm2/themes/ oder Pfad zu einer .itermcolors-Datei.
+# Eingebaut: "iTerm2 Default", "iTerm2 Light", "Solarized Dark", "Solarized Light",
+#            "Dracula", "Gruvbox Dark", "Nord", "One Dark", "Tokyo Night", "Catppuccin Mocha"
+# Auswahl zur Laufzeit mit Ctrl+Shift+P – Enter schreibt diese Zeile hier um.
+theme = "iTerm2 Default"
+
+# Shell samt Argumenten. Ohne Angabe: deine Login-Shell ($SHELL bzw. /etc/passwd).
+# shell = "/usr/bin/zsh -l"
+
+# Innenabstand jeder Pane zum Rand in Pixeln.
+padding = 6
+
+# Zeichnen: "auto" = GPU (Vulkan/OpenGL), bei Problemen automatisch CPU
+#           "gpu"  = nur GPU, Fehler beim Start statt Rückfall
+#           "cpu"  = immer CPU
+renderer = "auto"
+
+
+# ─── Schrift ────────────────────────────────────────────────────────────────
+
+[font]
+# TTF/OTF-Datei einer Monospace-Schrift. Ohne Angabe fragt rterm2 `fc-match monospace`.
+# path = "/usr/share/fonts/TTF/JetBrainsMono-Regular.ttf"
+
+# Größe in Punkt (wird mit dem Skalierungsfaktor des Monitors multipliziert).
+# Zur Laufzeit: Ctrl++ / Ctrl+- / Ctrl+0.
+size = 14.0
+
+
+# ─── Tastenkürzel ───────────────────────────────────────────────────────────
+#
+# Ein Eintrag ERSETZT alle Standard-Kürzel seiner Aktion – soll ein altes Kürzel
+# bleiben, muss es mit in der Liste stehen:
+#     split_right = ["ctrl+shift+d", "super+d"]
+# Abschalten:  close_pane = "none"
+# Ist ein Kürzel schon einer anderen Aktion zugeordnet, gewinnt der Eintrag hier.
+#
+# Modifikatoren: ctrl, shift, alt, altgr, super
+# Tasten: a–z, 0–9, Zeichen wie / oder ., plus, minus, equal, enter, tab, space,
+#         escape, backspace, delete, insert, home, end, pageup, pagedown,
+#         left, right, up, down, f1–f12
+#
+# Prüfen, was rterm2 bei einer Taste sieht:  RUST_LOG=rterm2=debug rterm2
+# Die Tasten im Copy-Mode (hjkl, v, y, / …) sind fest und stehen nicht hier.
+
+[keybindings]
+# Fenster und Tabs
+new_window = "ctrl+shift+n"
+new_tab = "ctrl+shift+t"
+next_tab = ["ctrl+pagedown", "ctrl+tab"]
+prev_tab = ["ctrl+pageup", "ctrl+shift+tab"]
+select_tab_1 = "alt+1"
+select_tab_2 = "alt+2"
+select_tab_3 = "alt+3"
+select_tab_4 = "alt+4"
+select_tab_5 = "alt+5"
+select_tab_6 = "alt+6"
+select_tab_7 = "alt+7"
+select_tab_8 = "alt+8"
+select_tab_9 = "alt+9"
+
+# Panes
+split_right = "ctrl+shift+d"
+split_down = "ctrl+shift+e"
+close_pane = "ctrl+shift+w"
+toggle_zoom = "ctrl+shift+enter"
+focus_left = ["ctrl+shift+h", "alt+left", "altgr+left", "ctrl+alt+left", "ctrl+altgr+left"]
+focus_down = ["ctrl+shift+j", "alt+down", "altgr+down", "ctrl+alt+down", "ctrl+altgr+down"]
+focus_up = ["ctrl+shift+k", "alt+up", "altgr+up", "ctrl+alt+up", "ctrl+altgr+up"]
+focus_right = ["ctrl+shift+l", "alt+right", "altgr+right", "ctrl+alt+right", "ctrl+altgr+right"]
+resize_left = "ctrl+shift+left"
+resize_right = "ctrl+shift+right"
+resize_up = "ctrl+shift+up"
+resize_down = "ctrl+shift+down"
+
+# Verlauf, Suche, Kopieren
+scroll_page_up = "shift+pageup"
+scroll_page_down = "shift+pagedown"
+search = "ctrl+shift+f"
+copy_mode = "ctrl+shift+space"
+copy = "ctrl+shift+c"
+paste = "ctrl+shift+v"
+
+# Darstellung
+font_bigger = ["ctrl+plus", "ctrl+equal", "ctrl+shift+plus", "ctrl+shift+equal"]
+font_smaller = "ctrl+minus"
+font_reset = "ctrl+0"
+theme_picker = "ctrl+shift+p"

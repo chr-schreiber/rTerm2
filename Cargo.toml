@@ -1,0 +1,32 @@
+[package]
+name = "rterm2"
+version = "0.1.0"
+edition = "2021"
+description = "VT100/xterm-Terminal für Linux (X11/Wayland) im Stil von iTerm2"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+# Terminal-Kern: VT-Parser, Grid, Scrollback, PTY-Eventloop
+alacritty_terminal = "0.25"
+# Fenster & Eingabe (X11 + Wayland)
+winit = "0.30"
+# CPU-Renderer: Framebuffer
+softbuffer = "0.4"
+fontdue = "0.9"
+# GPU-Renderer (Vulkan, notfalls OpenGL); CPU-Renderer (softbuffer) bleibt als Rückfall
+wgpu = "25"
+pollster = "0.4"
+# Farbschemas (.itermcolors sind XML-Plists)
+plist = "1"
+# Zwischenablage (CLIPBOARD + PRIMARY, X11 und Wayland)
+arboard = { version = "3", default-features = false, features = ["wayland-data-control"] }
+# Konfiguration
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+dirs = "5"
+anyhow = "1"
+log = "0.4"
+env_logger = "0.11"
+
+[profile.release]
+lto = "thin"
