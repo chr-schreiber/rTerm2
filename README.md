@@ -1,4 +1,4 @@
-# rterm2
+# rTerm2
 
 **English** · [Deutsch](README.de.md)
 
