@@ -2,7 +2,9 @@
 Type=Application
 Name=rterm2
 GenericName=Terminal
-Comment=Terminal im Stil von iTerm2
+GenericName[de]=Terminal
+Comment=Terminal emulator inspired by iTerm2
+Comment[de]=Terminal im Stil von iTerm2
 Exec=rterm2
 Icon=utilities-terminal
 Terminal=false
@@ -12,5 +14,6 @@ StartupWMClass=rterm2
 Actions=new-window;
 
 [Desktop Action new-window]
-Name=Neues Fenster
+Name=New Window
+Name[de]=Neues Fenster
 Exec=rterm2

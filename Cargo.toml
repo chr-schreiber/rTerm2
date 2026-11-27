@@ -3,7 +3,7 @@ name = "rterm2"
 version = "0.1.0"
 edition = "2021"
 description = "iTerm2-inspired terminal emulator for Linux (X11/Wayland): tabs, split panes, iTerm2 color schemes, GPU rendering"
-license = "MIT OR Apache-2.0"
+license = "MIT"
 readme = "README.md"
 keywords = ["terminal", "terminal-emulator", "wayland", "x11", "iterm2"]
 categories = ["command-line-utilities"]
@@ -37,6 +37,9 @@ lto = "thin"
 # Debian-Paket: `cargo deb` bzw. `make deb` → target/debian/rterm2_<version>-1_<arch>.deb
 [package.metadata.deb]
 maintainer = "Christian Schreiber <chr.schreiber@gmx.de>"
+# /usr/share/doc/rterm2/copyright: Debian verlangt Urheber und den vollen Lizenztext
+copyright = "2026 Christian Schreiber <chr.schreiber@gmx.de>"
+license-file = ["LICENSE", "0"]
 section = "x11"
 priority = "optional"
 extended-description = """\
@@ -50,7 +53,7 @@ alacritty_terminal."""
 # xkbcommon (Tastatur, winit), fontconfig (fc-match, Schriftsuche).
 depends = "$auto, libxkbcommon0, libxkbcommon-x11-0, fontconfig"
 # Je nach Sitzung (Wayland/X11) und Grafiktreiber; rterm2 fällt ohne GPU auf die CPU zurück.
-recommends = "libwayland-client0, libwayland-cursor0, libx11-6, libx11-xcb1, libxcursor1, libxrandr2, libxi6, libvulkan1, mesa-vulkan-drivers, libegl1, fonts-dejavu-core"
+recommends = "libwayland-client0, libwayland-cursor0, libwayland-egl1, libx11-6, libx11-xcb1, libxcursor1, libxrandr2, libxi6, libvulkan1, mesa-vulkan-drivers, libegl1, fonts-dejavu-core"
 assets = [
     ["target/release/rterm2", "usr/bin/", "755"],
     ["rterm2.desktop", "usr/share/applications/", "644"],
