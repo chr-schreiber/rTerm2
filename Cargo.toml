@@ -1,6 +1,6 @@
 [package]
 name = "rterm2"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "iTerm2-inspired terminal emulator for Linux (X11/Wayland): tabs, split panes, iTerm2 color schemes, GPU rendering"
 license = "MIT"

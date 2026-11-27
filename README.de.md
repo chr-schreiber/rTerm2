@@ -22,7 +22,7 @@ Terminal-Emulator für Linux (X11 und Wayland) in Rust, inspiriert von iTerm2: T
 Fertige Pakete für **amd64** und **arm64** gibt es unter [Releases](../../releases) (gebaut auf Debian 12, laufen auch auf Debian 13 und aktuellen Ubuntu-Versionen):
 
 ```sh
-sudo apt install ./rterm2_0.1.0-1_amd64.deb
+sudo apt install ./rterm2_*_amd64.deb      # arm64: ./rterm2_*_arm64.deb
 ```
 
 Selbst bauen: `cargo install cargo-deb`, dann `make deb` → `target/debian/`.
