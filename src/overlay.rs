@@ -5,6 +5,10 @@ use crate::theme::{Theme, ThemeLibrary};
 
 /// Maximal sichtbare Einträge in der Liste.
 const MAX_ROWS: usize = 12;
+/// Fußzeile – bestimmt auch die Mindestbreite, damit sie nie abgeschnitten wird.
+const HINT: &str = "↑↓ wählen · tippen filtert · Enter übernehmen · Esc zurück";
+/// Innenabstand des Panels
+const PAD: usize = 8;
 
 /// Zeichnet die Schema-Auswahl oben mittig ins Fenster. `ui` ist das gerade aktive (Vorschau-)Schema.
 pub fn draw_theme_picker(
@@ -21,11 +25,14 @@ pub fn draw_theme_picker(
     let row_h = ch + 6;
     let rows = visible.len().clamp(1, MAX_ROWS);
 
-    let w = (56 * cw)
+    // Breit genug für die Fußzeile (+2 Zeichen Luft), aber nie breiter als das Fenster
+    let wanted = (56 * cw).max((HINT.chars().count() + 2) * cw + 2 * PAD);
+    let w = wanted
         .min(area.w.saturating_sub(40))
         .max(20 * cw)
         .min(area.w);
-    let h = (rows + 2) * row_h + 24;
+    // Kopfzeile + Trennlinie + Liste + Fußzeile, oben und unten gleicher Rand
+    let h = 2 * PAD + row_h + 2 + rows * row_h + 2 + ch + 4;
     let x = area.x + area.w.saturating_sub(w) / 2;
     let y = area.y + (area.h / 8).min(60);
     let panel = Rect {
@@ -44,7 +51,7 @@ pub fn draw_theme_picker(
     frame.fill(area, panel.x, panel.y, 1, panel.h, border);
     frame.fill(area, panel.x + panel.w - 1, panel.y, 1, panel.h, border);
 
-    let inner = panel.inset(8);
+    let inner = panel.inset(PAD);
     let text_y = |row: usize| inner.y + row * row_h + 3;
 
     // Kopfzeile mit Filter
@@ -122,9 +129,17 @@ pub fn draw_theme_picker(
     }
 
     // Fußzeile
-    let hint = "↑↓ wählen · tippen filtert · Enter übernehmen · Esc zurück";
     let hint_y = list_top + rows * row_h + 2;
-    let hint: String = hint.chars().take(inner.w / cw).collect();
+    // Nur bei sehr schmalen Fenstern kürzen – dann sichtbar mit …
+    let max = inner.w / cw.max(1);
+    let hint: String = if HINT.chars().count() <= max {
+        HINT.to_string()
+    } else {
+        HINT.chars()
+            .take(max.saturating_sub(1))
+            .chain(['…'])
+            .collect()
+    };
     renderer::draw_text(
         frame,
         inner,
