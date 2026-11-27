@@ -1,7 +1,9 @@
 # Baut rterm2 als Debian-Paket (.deb) für amd64 und arm64.
 #
 # - Push / Pull Request: bauen, testen, .deb als Artefakt (Actions → Lauf → „Artifacts“)
-# - Tag v*  (z. B. git tag v0.1.0 && git push --tags): zusätzlich GitHub-Release mit den .deb-Dateien
+# - Tag v*  (z. B. git tag v0.1.1 && git push origin v0.1.1): zusätzlich GitHub-Release mit den .deb-Dateien
+# - Manuell (Actions → Debian-Paket → Run workflow): bei Auswahl eines Tags unter
+#   „Use workflow from“ entsteht ebenfalls das Release – nützlich, wenn ein Tag-Push keinen Lauf ausgelöst hat
 #
 # Gebaut wird in Debian 12 (bookworm): Pakete gegen die ältere glibc laufen auch auf
 # Debian 13 und aktuellen Ubuntu-Versionen.
@@ -39,7 +41,7 @@ jobs:
           apt-get install -y --no-install-recommends \
             ca-certificates curl git build-essential pkg-config dpkg-dev
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Debians eigenes rustc ist für wgpu & Co. zu alt → aktuelles stable über rustup
       - name: Rust installieren
@@ -81,7 +83,7 @@ jobs:
           dpkg-deb --contents "$deb"
 
       - name: Artefakt hochladen
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: rterm2-${{ matrix.arch }}-deb
           path: target/debian/*.deb
