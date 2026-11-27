@@ -4,6 +4,7 @@
 #   make install         nach ~/.local installieren (Programm + Startmenü-Eintrag)
 #   make config          Config-Vorlage nach ~/.config/rterm2/config.toml (überschreibt nichts)
 #   make uninstall       wieder entfernen
+#   make deb             Debian-Paket (target/debian/*.deb, braucht cargo-deb)
 #
 # Systemweit:            sudo make install PREFIX=/usr/local
 # Für Pakete:            make install DESTDIR=/tmp/pkg PREFIX=/usr
@@ -18,7 +19,7 @@ CARGO   ?= cargo
 BIN     := target/release/rterm2
 CONFIG_DIR := $(or $(XDG_CONFIG_HOME),$(HOME)/.config)/rterm2
 
-.PHONY: all build debug run test check fmt clippy install uninstall config clean help
+.PHONY: all build debug run test check fmt clippy install uninstall config deb clean help
 
 all: build
 
@@ -78,6 +79,10 @@ config:
 		install -Dm644 config.example.toml "$(CONFIG_DIR)/config.toml"; \
 		echo "Config angelegt: $(CONFIG_DIR)/config.toml"; \
 	fi
+
+## deb        Debian-Paket bauen (braucht: cargo install cargo-deb) → target/debian/
+deb: build
+	$(CARGO) deb --no-build
 
 ## clean      Build-Verzeichnis löschen
 clean:

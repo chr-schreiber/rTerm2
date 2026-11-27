@@ -17,6 +17,16 @@ iTerm2-inspired terminal emulator for Linux (X11 and Wayland), written in Rust: 
 - **Tab titles** show the program running in the active pane (`zsh`, `nvim`, `htop` …)
 - Mouse is optional: selection, PRIMARY selection, mouse reporting for mc/htop/vim, draggable dividers
 
+## Debian package
+
+Ready-made packages for **amd64** and **arm64** are available under [Releases](../../releases) (built on Debian 12, they also run on Debian 13 and current Ubuntu releases):
+
+```sh
+sudo apt install ./rterm2_0.1.0-1_amd64.deb
+```
+
+Build it yourself: `cargo install cargo-deb`, then `make deb` → `target/debian/`.
+
 ## Build & install with make
 
 ```sh
@@ -24,7 +34,7 @@ make              # release build
 make install      # to ~/.local/bin + menu entry (system-wide: sudo make install PREFIX=/usr/local)
 make config       # copy the config template to ~/.config/rterm2/config.toml (never overwrites)
 make uninstall    # remove again, your own config stays
-make help         # all targets: run, test, check, fmt, clippy, clean …
+make help         # all targets: run, test, check, fmt, clippy, deb, clean …
 ```
 
 `~/.local/bin` must be in `PATH` for the application menu to find rterm2 – `make install` tells you if it isn't. For packaging: `make install DESTDIR=/tmp/pkg PREFIX=/usr`.
@@ -37,7 +47,7 @@ RUST_LOG=info cargo run           # with log output
 RUST_LOG=rterm2=debug cargo run   # logs every key with its modifiers
 ```
 
-Requires: Rust ≥ 1.77 and `fc-match` (fontconfig) to find a font; alternatively set `[font] path`.
+Requires: current stable Rust (via [rustup](https://rustup.rs)) and `fc-match` (fontconfig) to find a font; alternatively set `[font] path`.
 
 Installing without make:
 

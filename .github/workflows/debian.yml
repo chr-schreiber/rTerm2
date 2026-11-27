@@ -1,0 +1,95 @@
+# Baut rterm2 als Debian-Paket (.deb) für amd64 und arm64.
+#
+# - Push / Pull Request: bauen, testen, .deb als Artefakt (Actions → Lauf → „Artifacts“)
+# - Tag v*  (z. B. git tag v0.1.0 && git push --tags): zusätzlich GitHub-Release mit den .deb-Dateien
+#
+# Gebaut wird in Debian 12 (bookworm): Pakete gegen die ältere glibc laufen auch auf
+# Debian 13 und aktuellen Ubuntu-Versionen.
+
+name: Debian-Paket
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write # nötig, um bei Tags ein Release anzulegen
+
+jobs:
+  deb:
+    name: .deb (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    container: debian:bookworm
+
+    steps:
+      - name: Build-Werkzeuge installieren
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            ca-certificates curl git build-essential pkg-config dpkg-dev
+
+      - uses: actions/checkout@v4
+
+      # Debians eigenes rustc ist für wgpu & Co. zu alt → aktuelles stable über rustup
+      - name: Rust installieren
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Cargo-Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.arch }}
+
+      - name: Tag passt zur Version in Cargo.toml?
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)"
+          if [ "$tag" != "$version" ]; then
+            echo "::error::Tag v$tag passt nicht zu version = \"$version\" in Cargo.toml"
+            exit 1
+          fi
+
+      - name: Tests
+        run: cargo test --release --locked
+
+      - name: cargo-deb installieren
+        run: cargo install cargo-deb --locked
+
+      - name: Release-Build
+        run: cargo build --release --locked
+
+      - name: Paket bauen
+        run: cargo deb --no-build
+
+      - name: Paket prüfen
+        run: |
+          deb="$(ls target/debian/*.deb)"
+          dpkg-deb --info "$deb"
+          dpkg-deb --contents "$deb"
+
+      - name: Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: rterm2-${{ matrix.arch }}-deb
+          path: target/debian/*.deb
+          if-no-files-found: error
+
+      - name: Release anlegen / ergänzen
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/debian/*.deb
+          generate_release_notes: true

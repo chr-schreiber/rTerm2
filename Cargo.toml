@@ -2,8 +2,11 @@
 name = "rterm2"
 version = "0.1.0"
 edition = "2021"
-description = "VT100/xterm-Terminal für Linux (X11/Wayland) im Stil von iTerm2"
+description = "iTerm2-inspired terminal emulator for Linux (X11/Wayland): tabs, split panes, iTerm2 color schemes, GPU rendering"
 license = "MIT OR Apache-2.0"
+readme = "README.md"
+keywords = ["terminal", "terminal-emulator", "wayland", "x11", "iterm2"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 # Terminal-Kern: VT-Parser, Grid, Scrollback, PTY-Eventloop
@@ -30,3 +33,28 @@ env_logger = "0.11"
 
 [profile.release]
 lto = "thin"
+
+# Debian-Paket: `cargo deb` bzw. `make deb` → target/debian/rterm2_<version>-1_<arch>.deb
+[package.metadata.deb]
+maintainer = "Christian Schreiber <chr.schreiber@gmx.de>"
+section = "x11"
+priority = "optional"
+extended-description = """\
+rterm2 is a terminal emulator for Linux (X11 and Wayland) inspired by iTerm2. \
+It offers windows, tabs and split panes via keyboard shortcuts, iTerm2 color \
+schemes (.itermcolors) with a live preview picker, GPU rendering via wgpu, \
+scrollback search and a vim-style copy mode. The terminal core is \
+alacritty_terminal."""
+# $auto: alles, was das Programm direkt verlinkt (libc …). Dazu Bibliotheken, die erst zur
+# Laufzeit per dlopen geladen werden und die dpkg-shlibdeps deshalb nicht findet:
+# xkbcommon (Tastatur, winit), fontconfig (fc-match, Schriftsuche).
+depends = "$auto, libxkbcommon0, libxkbcommon-x11-0, fontconfig"
+# Je nach Sitzung (Wayland/X11) und Grafiktreiber; rterm2 fällt ohne GPU auf die CPU zurück.
+recommends = "libwayland-client0, libwayland-cursor0, libx11-6, libx11-xcb1, libxcursor1, libxrandr2, libxi6, libvulkan1, mesa-vulkan-drivers, libegl1, fonts-dejavu-core"
+assets = [
+    ["target/release/rterm2", "usr/bin/", "755"],
+    ["rterm2.desktop", "usr/share/applications/", "644"],
+    ["README.md", "usr/share/doc/rterm2/", "644"],
+    ["README.de.md", "usr/share/doc/rterm2/", "644"],
+    ["config.example.toml", "usr/share/doc/rterm2/", "644"],
+]
